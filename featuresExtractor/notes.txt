@@ -1,0 +1,50 @@
+
+our json template:
+
+{
+  "tempo": 120.5, 
+  //The estimated global tempo of the track, measured in beats per minute (BPM).
+  "beats": [0.5, 1.0, 1.5, ...],
+  //List of time positions (in seconds) where beats occur. Beat detection algorithm (e.g. librosa.beat.beat_track)
+  "onsets": [0.3, 0.9, 1.7, ...],
+  // Time points (in seconds) where distinct musical events start (notes, percussions, attacks).
+
+  "amplitude_envelope": {
+    "times": [0.0, 0.02, 0.04, ...],
+    "values": [0.01, 0.05, 0.07, ...] 
+    // A time-based measurement. Represents the overall loudness (volume) of the audio at each moment.
+  },
+  "frequencies": {
+    "hz": [0, 86, 172, ...],
+    // center frequency of each band
+    "average_amplitudes": [0.001, 0.002, ...]
+    // energy of each frequency across the whole song
+    // the enery is Square of amplitude have as unit : Power (e.g., volume perception)
+  }
+}
+
+
+How to Choose the Right Lengths:
+
+📌 Amplitude Envelope
+Choose a hop_length (e.g., 512 or 1024) when doing STFT or RMS
+With audio sampled at 22050 Hz and hop_length=512, that gives:
+duration_in_seconds × 22050 / 512 ≈ number of frames
+
+➤ For a 3-minute song(exemple):
+180 × 22050 / 512 ≈ 7750 samples
+
+📌 Beats / Onsets
+for beats, just store all timestamps:
+"beats": [0.45, 1.01, 1.57, 2.15, ...]
+
+📌 Frequencies (e.g. average or spectrogram data)
+You have options:
+Simplified average band values (e.g., low, mid, high) sampled per time frame:
+
+"frequencies": {
+  "times": [...],
+  "average_amplitudes": [0.001, 0.002, ...]
+}
+lenth of frequancis is n_bins = n_fft // 2 + 1
+
