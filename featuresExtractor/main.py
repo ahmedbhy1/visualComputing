@@ -8,7 +8,7 @@ def analyze_audio(file_path, output_json):
     y, sr = librosa.load(file_path, sr=None)
 
     # Tempo and beat frames
-    tempo, beat_frames = librosa.beat.beat_track(y=y, sr=sr)
+    tempo, beat_frames = librosa.beat.beat_track(y=y, sr=sr,trim=False)
     beat_times = librosa.frames_to_time(beat_frames, sr=sr).tolist()
     if len(tempo)!=1:
         raise ValueError("something is wrong")
